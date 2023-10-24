@@ -6,10 +6,11 @@ async function handler(_req: Request): Promise<Response> {
         const guess = await extractGuess(_req);
         return new Response("Guess received: "+ guess);}
     catch(error){
-        const word1 = "hello";
+        const word1 = "hello ";
         const word2 = "world";
         const result = await similarity(word1, word2);
-        return new Response(String(result));
+        // return new Response(String(result));
+        return new Response(String(error));
     }
 
 }
