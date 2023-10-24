@@ -3,12 +3,12 @@ import { serve } from "https://deno.land/std@0.119.0/http/server.ts";
 async function handler(_req: Request): Promise<Response> {
     // get request body
     try{
-    const word1 = "hello";
-    const word2 = "world";
-    const result = await similarity(word1, word2);
-    const guess = await extractGuess(_req);
-    return new Response("Guess received: ${guess}";)}
+        const guess = await extractGuess(_req);
+        return new Response("Guess received: "+ guess);}
     catch(error){
+        const word1 = "hello";
+        const word2 = "world";
+        const result = await similarity(word1, word2);
         return new Response(String(result));
     }
 
