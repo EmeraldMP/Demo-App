@@ -5,8 +5,11 @@ async function handler(_req: Request): Promise<Response> {
     try{
         const word1 = "chien";
         const guess = await extractGuess(_req);
-        const result = await similarity(word1, guess);
-        return new Response("Guess received: "+ result);}
+        const score = await similarity(word1, guess);
+        const response = responseBuilder(score, guess);
+
+        return new Response(response);
+    }
     catch(error){
         return new Response(String(error));
     }
@@ -14,7 +17,24 @@ async function handler(_req: Request): Promise<Response> {
 }
 
 async function similarity(word1, word2){
-    return word1 + word2;
+    const body = {
+        sim1: word1,
+        sim2: word2,
+        lang: "fr",
+        type: "General Word2Vec",
+      };
+    const similarityResponse = await fetch(
+        "http://nlp.polytechnique.fr/similarityscore",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+    const similarityResponseJson = await similarityResponse.json();
+    return Number(similarityResponseJson.simscore);
 }
 
 const extractGuess = async (_req: Request) => {
@@ -25,5 +45,15 @@ const extractGuess = async (_req: Request) => {
     }
     return guess;
   };
+
+async function responseBuilder(similarityResult, guess){
+    if (similarityResult==1){
+        return "Congratulations, you guessed correctly!";
+    } else {
+        return `Sorry, ${guess} is incorrect. Similarity:${similarityResult}`;
+    }
+}
+
+
 
 serve(handler);
