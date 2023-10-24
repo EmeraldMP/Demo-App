@@ -5,11 +5,23 @@ async function handler(_req: Request): Promise<Response> {
     const word1 = "hello";
     const word2 = "world";
     const result = await similarity(word1, word2);
-    return new Response(String(result))
+    const guess = await extractGuess(_req);
+    return new Response("Guess received: ${guess}")
+
 }
 
 async function similarity(word1, word2){
     return word1 + word2;
 }
+
+
+const extractGuess = async (_req: Request) => {
+    const slackPayload = await _req.formData();
+    const guess = await slackPayload.get("text")?.toString();
+    if (!guess) {
+      throw Error("Guess is empty or null");
+    }
+    return guess;
+  };
 
 serve(handler);
