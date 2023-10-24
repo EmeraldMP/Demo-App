@@ -50,7 +50,7 @@ function responseBuilder(similarityResult, guess){
     if (similarityResult==1){
         return "Congratulations, you guessed correctly!";
     } else {
-        return `Sorry, ${guess} is incorrect. Similarity:${similarityResult}`;
+        return `Sorry, ${guess} is incorrect. Similarity: ${similarityResult}`;
     }
 }
 
