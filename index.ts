@@ -46,7 +46,7 @@ const extractGuess = async (_req: Request) => {
     return guess;
   };
 
-async function responseBuilder(similarityResult, guess){
+function responseBuilder(similarityResult, guess){
     if (similarityResult==1){
         return "Congratulations, you guessed correctly!";
     } else {
